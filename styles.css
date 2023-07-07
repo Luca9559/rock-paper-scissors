@@ -1,0 +1,14 @@
+.box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button {
+    height: 50px;
+    width: 80px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
