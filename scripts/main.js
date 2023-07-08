@@ -1,13 +1,5 @@
 const canvas = document.getElementById("canvas");
-const UP_RIGHT = 0;
-const UP_LEFT = 1;
-const DOWN_RIGHT = 2;
-const DOWN_LEFT = 3;
-const SIZE = 50;
-const CANVAS = 750;
-const ROCK_ID = 1;
-const PAPER_ID = 2;
-const SCISSORS_ID = 3;
+
 let rock;
 let paper;
 let scissor;
@@ -18,45 +10,16 @@ init();
 let interval = setInterval(draw, 10);
 
 function init() {
-    objArray = [
-        createObj(SCISSORS_ID, 10, 10),
-        createObj(SCISSORS_ID, 80, 10),
-        createObj(SCISSORS_ID, 10, 80),
-        createObj(SCISSORS_ID, 10, 150),
-        createObj(SCISSORS_ID, 150, 10),
-        createObj(SCISSORS_ID, 80, 80),
-        createObj(PAPER_ID, 10, 740),
-        createObj(PAPER_ID, 80, 740),
-        createObj(PAPER_ID, 10, 670),
-        createObj(PAPER_ID, 10, 600),
-        createObj(PAPER_ID, 150, 740),
-        createObj(PAPER_ID, 80, 670),
-        createObj(ROCK_ID, 740, 740),
-        createObj(ROCK_ID, 670, 740),
-        createObj(ROCK_ID, 740, 670),
-        createObj(ROCK_ID, 670, 670),
-        createObj(ROCK_ID, 740, 600),
-        createObj(ROCK_ID, 600, 740),
-    ]
+    objArray = getObjArray(); // from objects.js
     if (canvas.getContext) {
         ctx = canvas.getContext("2d");
     }
     rock = new Image();
-    rock.src = 'assets/rock.png';
+    rock.src = 'assets/rock30x.png';
     paper = new Image();
-    paper.src = 'assets/paper.png';
+    paper.src = 'assets/paper30x.png';
     scissor = new Image();
-    scissor.src = 'assets/scissors.png';
-}
-
-function createObj(status, x, y) {
-    return {
-        status: status,
-        x: x,
-        y: y,
-        direction: rando(),
-        colliding: false
-    }
+    scissor.src = 'assets/scissors30x.png';
 }
 
 function draw() {
@@ -71,7 +34,7 @@ function draw() {
             ctx.drawImage(paper, objArray[i].x, objArray[i].y);
         }
     }
-    if (shouldRestart()) {
+    if (shouldStop()) {
         clearInterval(interval);
     }
 }
@@ -140,7 +103,7 @@ function updateCollision(index) {
 }
 
 function getNewDirection(currentDirection) {
-    let rando = Math.floor(Math.random() * 4);
+    let rando = Math.floor(Math.random() * 4); // rando function causes ReferenceError (probably because of synchronicity)
     while (currentDirection === rando) {
         rando = Math.floor(Math.random() * 4);
     }
@@ -160,7 +123,7 @@ function battle(obj1, obj2) {
     return obj1.status;
 }
 
-function shouldRestart() {
+function shouldStop() {
     let firstObj = objArray[0];
     for (let i = 1; i < objArray.length; i++) {
         if (firstObj.status !== objArray[i].status) {
@@ -170,14 +133,8 @@ function shouldRestart() {
     return true;
 }
 
-function rando() {
-    return Math.floor(Math.random() * 4);
-}
-
 function restart() {
     init();
     clearInterval(interval);
     interval = setInterval(draw, 10);
 }
-
-
